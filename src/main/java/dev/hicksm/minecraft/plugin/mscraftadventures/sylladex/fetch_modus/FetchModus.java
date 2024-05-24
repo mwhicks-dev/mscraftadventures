@@ -11,7 +11,7 @@ import org.bukkit.entity.Item;
 public abstract class FetchModus {
 	
 	/** Items contained in FetchModus. */
-	private Item[] items;
+	protected Item[] items;
 	
 	/** Create empty fetch modus with 5 slots. */
 	public FetchModus() { this(5); }
