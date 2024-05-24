@@ -26,5 +26,9 @@ public class SylladexManager {
 	public FetchModus getPlayerFetchModus(Player p) {
 		return fetchModi.get(p);
 	}
+	
+	public void setPlayerFetchModus(Player p, FetchModus modus) {
+		fetchModi.put(p, modus);
+	}
 
 }

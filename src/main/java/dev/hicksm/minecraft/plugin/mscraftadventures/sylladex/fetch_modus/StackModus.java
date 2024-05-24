@@ -24,6 +24,8 @@ public class StackModus extends FetchModus {
 		super(other);
 		collapseItemsLeft();
 	}
+	
+	public StackModus() { super(); }
 
 	@Override
 	public void addItem(Item item) {

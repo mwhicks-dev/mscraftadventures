@@ -7,11 +7,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+
+import dev.hicksm.minecraft.plugin.mscraftadventures.sylladex.fetch_modus.StackModus;
 
 public class SylladexListener implements Listener {
 	
-	private static final int MAIN_SLOT_ID = 36;
+	private static final int MAIN_SLOT_ID = 0;
 	
 	@EventHandler
 	public void onItemPickup(EntityPickupItemEvent e) {
@@ -25,34 +29,39 @@ public class SylladexListener implements Listener {
 		if (items[MAIN_SLOT_ID] == null) {
 			// if main hand free, put item there
 			items[MAIN_SLOT_ID] = e.getItem().getItemStack();
+			e.getItem().remove();
 		} else {
-			// otherwise, cancel
 			e.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
-	public void onItemDrop(EntityDropItemEvent e) {
-		// handle as normal if item is not picked up by player
-		if (e.getEntityType() != EntityType.PLAYER) return;
+	public void onItemDrop(PlayerDropItemEvent e) {
+		Player p = e.getPlayer();
 		
-		// validate slot
-		Player p = (Player) e.getEntity();
-		if (p.getInventory().getHeldItemSlot() != 36) {
+		if (p.getInventory().getHeldItemSlot() != MAIN_SLOT_ID) {
 			e.setCancelled(true);
 		}
 		// else if player is sneaking add to sylladex
 		else if (p.isSneaking()) {
-			// cancel actual Item drop
-			e.setCancelled(true);
-			
 			// add to sylladex
 			Item drop = e.getItemDrop();
 			if (drop != null) {
 				SylladexManager.getInstance().getPlayerFetchModus(p)
 						.addItem(drop);
 			}
+			
+			// remove actual item drop
+			e.getItemDrop().remove();
 		}
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		// if player has no fetch modus give them stack
+		// TODO: initial set-up flow
+		if (SylladexManager.getInstance().getPlayerFetchModus(e.getPlayer()) == null)
+			SylladexManager.getInstance().setPlayerFetchModus(e.getPlayer(), new StackModus());
 	}
 
 }
