@@ -9,22 +9,22 @@ import dev.hicksm.minecraft.plugin.mscraftadventures.sylladex.fetch_modus.FetchM
 
 public class SylladexManager {
 	
-	private Map<Player, FetchModus> inventories = null;
+	private Map<Player, FetchModus> fetchModi = null;
 	
 	private static SylladexManager instance = null;
 	
 	private SylladexManager() {
-		inventories = new HashMap<>();
+		fetchModi = new HashMap<>();
 	}
 	
 	/** Get singleton SylladexManager */
-	public SylladexManager getInstance() {
+	public static SylladexManager getInstance() {
 		if (instance == null) instance = new SylladexManager();
 		return instance;
 	}
 	
-	public FetchModus getPlayerInventory(Player p) {
-		return inventories.get(p);
+	public FetchModus getPlayerFetchModus(Player p) {
+		return fetchModi.get(p);
 	}
 
 }
